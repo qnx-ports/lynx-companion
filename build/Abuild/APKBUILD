@@ -1,0 +1,59 @@
+# Alpine-Contributor: Sören Tempel <soeren+alpine@soeren-tempel.net>
+# Alpine-Contributor: Sheila Aman <sheila@vulpine.house>
+# Alpine-Maintainer: Sheila Aman <sheila@vulpine.house>
+# Maintainer: Aaron Bassett <abassett@qnx.com>
+pkgname=lynx
+pkgver=2.9.2
+_relver=${pkgver/_p/rel.}
+pkgrel=0
+pkgdesc="Cross-platform text-based browser"
+url="https://lynx.invisible-island.net/"
+arch="all"
+license="GPL-2.0-only"
+depends="libcrypto3 libintl zlib-ng glib ncurses"
+makedepends="openssl-dev>3 gettext zlib-ng-dev glib-dev perl ncurses-dev"
+subpackages="$pkgname-doc"
+source="https://invisible-mirror.net/archives/lynx/tarballs/lynx$_relver.tar.bz2
+        atexit.patch
+	fix-qnx.patch
+"
+builddir="$srcdir"/$pkgname$_relver
+
+build() {
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--mandir=/usr/share/man \
+		--infodir=/usr/share/info \
+		--localstatedir=/var \
+		--enable-ipv6 \
+		--with-ssl \
+		--enable-default-colors \
+		--with-screen=ncursesw \
+		--with-zlib \
+		--disable-full-paths \
+		--enable-externs \
+		--disable-nls \
+		--disable-find-leaks
+	make helpdir=/usr/share/doc/lynx/help \
+		docdir=/usr/share/doc/lynx
+}
+
+check() {
+	./lynx -version
+}
+
+package() {
+	make DESTDIR="$pkgdir" install install-help install-doc \
+		helpdir=/usr/share/doc/lynx/help \
+		docdir=/usr/share/doc/lynx
+}
+
+
+sha512sums="
+bb9ed23a5f8664ca8bccd95cc55683849aa707f601e209d84e0acaed151b78cd772316f527881022ff120049c4fc586c05d579f9d616a2b108d9ddfaa5b2159d  lynx2.9.2.tar.bz2
+6ba69ca047f52597fce36bd953d789fbfa5d8c0bc6e95949475b2cc2500341123a5473293b3bcde28dcb9111c7e0223afa00104c1371aaece3ac134192450691  atexit.patch
+45795267bb790c6d43414c963b83b31b2af619aa7f2af60b5e3dbebfe443033b5f8622b175f8cfb967340a93d46f3b04761a84c9fa34f66f3e37e250ac9389fc  fix-qnx.patch
+"

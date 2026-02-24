@@ -1,0 +1,14 @@
+--- lynx2.9.2.orig/src/LYUtils.c
++++ lynx2.9.2/src/LYUtils.c
+@@ -101,6 +101,11 @@
+ #include <lib$routines.h>
+ #endif /* VMS */
+ 
++#ifdef __QNX__
++#include <sys/types.h>
++#include <pwd.h>
++#endif /* __QNX__ */
++
+ #ifdef HAVE_UTMP
+ #include <pwd.h>
+ #ifdef UTMPX_FOR_UTMP

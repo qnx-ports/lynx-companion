@@ -1,0 +1,571 @@
+diff --git a/WWW/Library/Implementation/HTAABrow.c b/WWW/Library/Implementation/HTAABrow.c
+index c963acd..2ede457 100644
+--- a/WWW/Library/Implementation/HTAABrow.c
++++ b/WWW/Library/Implementation/HTAABrow.c
+@@ -896,11 +896,11 @@ char *HTAA_composeAuth(const char *hostname,
+     size_t len;
+ 
+     /*
+-     * Setup atexit() freeing if not done already.  - FM
++     * Setup LYatexit() freeing if not done already.  - FM
+      */
+     if (!free_HTAAGlobalsSet) {
+ #ifdef LY_FIND_LEAKS
+-	atexit(free_HTAAGlobals);
++	LYatexit(free_HTAAGlobals);
+ #endif
+ 	free_HTAAGlobalsSet = TRUE;
+     }
+@@ -1129,11 +1129,11 @@ BOOL HTAA_shouldRetryWithAuth(char *start_of_headers,
+     BOOL result = NO;
+ 
+     /*
+-     * Setup atexit() freeing if not done already.  - FM
++     * Setup LYatexit() freeing if not done already.  - FM
+      */
+     if (!free_HTAAGlobalsSet) {
+ #ifdef LY_FIND_LEAKS
+-	atexit(free_HTAAGlobals);
++	LYatexit(free_HTAAGlobals);
+ #endif
+ 	free_HTAAGlobalsSet = TRUE;
+     }
+diff --git a/WWW/Library/Implementation/HTAAProt.c b/WWW/Library/Implementation/HTAAProt.c
+index d5117f1..b7d1e0d 100644
+--- a/WWW/Library/Implementation/HTAAProt.c
++++ b/WWW/Library/Implementation/HTAAProt.c
+@@ -570,7 +570,7 @@ static void save_gid_info(const char *name, int user)
+ 	known_grp = HTList_new();
+ 	if (!uidgid_cache_inited) {
+ #ifdef LY_FIND_LEAKS
+-	    atexit(clear_uidgid_cache);
++	    LYatexit(clear_uidgid_cache);
+ #endif
+ 	    uidgid_cache_inited = YES;
+ 	}
+@@ -592,7 +592,7 @@ static void save_uid_info(const char *name, int user)
+ 	known_pwd = HTList_new();
+ 	if (!uidgid_cache_inited) {
+ #ifdef LY_FIND_LEAKS
+-	    atexit(clear_uidgid_cache);
++	    LYatexit(clear_uidgid_cache);
+ #endif
+ 	    uidgid_cache_inited = YES;
+ 	}
+diff --git a/WWW/Library/Implementation/HTAAUtil.c b/WWW/Library/Implementation/HTAAUtil.c
+index 1be26f9..4f5a11d 100644
+--- a/WWW/Library/Implementation/HTAAUtil.c
++++ b/WWW/Library/Implementation/HTAAUtil.c
+@@ -489,7 +489,7 @@ void HTAA_setupReader(char *start_of_headers,
+ 	outofmem(__FILE__, "HTAA_setupReader");
+ 
+ #ifdef LY_FIND_LEAKS
+-    atexit(FreeHTAAUtil);
++    LYatexit(FreeHTAAUtil);
+ #endif
+     start_pointer = buffer;
+     if (start_of_headers) {
+diff --git a/WWW/Library/Implementation/HTAccess.c b/WWW/Library/Implementation/HTAccess.c
+index ba81b83..f14cff1 100644
+--- a/WWW/Library/Implementation/HTAccess.c
++++ b/WWW/Library/Implementation/HTAccess.c
+@@ -108,7 +108,7 @@ BOOL HTRegisterProtocol(HTProtocol * protocol)
+     if (!protocols) {
+ 	protocols = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-	atexit(free_protocols);
++	LYatexit(free_protocols);
+ #endif
+     }
+     HTList_addObject(protocols, protocol);
+diff --git a/WWW/Library/Implementation/HTAtom.c b/WWW/Library/Implementation/HTAtom.c
+index 07eca77..8a34068 100644
+--- a/WWW/Library/Implementation/HTAtom.c
++++ b/WWW/Library/Implementation/HTAtom.c
+@@ -45,7 +45,7 @@ HTAtom *HTAtom_for(const char *string)
+ 	memset(hash_table, 0, sizeof(hash_table));
+ 	initialised = YES;
+ #ifdef LY_FIND_LEAKS
+-	atexit(free_atoms);
++	LYatexit(free_atoms);
+ #endif
+     }
+ 
+diff --git a/WWW/Library/Implementation/HTFTP.c b/WWW/Library/Implementation/HTFTP.c
+index a08701c..00900fc 100644
+--- a/WWW/Library/Implementation/HTFTP.c
++++ b/WWW/Library/Implementation/HTFTP.c
+@@ -803,7 +803,7 @@ static int get_connection(const char *arg,
+ 	 * Set up freeing at exit.  - FM
+ 	 */
+ #ifdef LY_FIND_LEAKS
+-	atexit(free_FTPGlobals);
++	LYatexit(free_FTPGlobals);
+ #endif
+ 	firstuse = FALSE;
+     }
+diff --git a/WWW/Library/Implementation/HTFile.c b/WWW/Library/Implementation/HTFile.c
+index 9b6c54f..740419e 100644
+--- a/WWW/Library/Implementation/HTFile.c
++++ b/WWW/Library/Implementation/HTFile.c
+@@ -552,7 +552,7 @@ void HTSetSuffix5(const char *suffix,
+ 	    if (!HTSuffixes) {
+ 		HTSuffixes = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-		atexit(free_suffixes);
++		LYatexit(free_suffixes);
+ #endif
+ 	    }
+ 
+diff --git a/WWW/Library/Implementation/HTFormat.c b/WWW/Library/Implementation/HTFormat.c
+index 198ea51..602fbed 100644
+--- a/WWW/Library/Implementation/HTFormat.c
++++ b/WWW/Library/Implementation/HTFormat.c
+@@ -133,7 +133,7 @@ void HTSetPresentation(const char *representation,
+     if (!HTPresentations) {
+ 	HTPresentations = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-	atexit(HTFreePresentations);
++	LYatexit(HTFreePresentations);
+ #endif
+     }
+ 
+@@ -188,7 +188,7 @@ void HTSetConversion(const char *representation_in,
+     if (!HTPresentations) {
+ 	HTPresentations = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-	atexit(HTFreePresentations);
++	LYatexit(HTFreePresentations);
+ #endif
+     }
+ 
+diff --git a/WWW/Library/Implementation/HTNews.c b/WWW/Library/Implementation/HTNews.c
+index a1b94dc..851a311 100644
+--- a/WWW/Library/Implementation/HTNews.c
++++ b/WWW/Library/Implementation/HTNews.c
+@@ -288,7 +288,7 @@ static BOOL initialize(void)
+ 
+     s = -1;			/* Disconnected */
+ #ifdef LY_FIND_LEAKS
+-    atexit(free_news_globals);
++    LYatexit(free_news_globals);
+ #endif
+     return YES;
+ }
+@@ -415,7 +415,7 @@ static NNTPAuthResult HTHandleAuthInfo(char *host)
+ 	NNTP_AuthInfo = HTList_new();
+ 	load_NNTP_AuthInfo();
+ #ifdef LY_FIND_LEAKS
+-	atexit(free_NNTP_AuthInfo);
++	LYatexit(free_NNTP_AuthInfo);
+ #endif
+     }
+ 
+diff --git a/WWW/Library/Implementation/HTRules.c b/WWW/Library/Implementation/HTRules.c
+index 91ac93d..43742a2 100644
+--- a/WWW/Library/Implementation/HTRules.c
++++ b/WWW/Library/Implementation/HTRules.c
+@@ -120,7 +120,7 @@ int HTAddRule(HTRuleOp op, const char *pattern,
+ 
+     if (!rules) {
+ #ifdef LY_FIND_LEAKS
+-	atexit(HTClearRules);
++	LYatexit(HTClearRules);
+ #endif
+     }
+ #ifdef PUT_ON_HEAD
+diff --git a/WWW/Library/Implementation/HTTCP.c b/WWW/Library/Implementation/HTTCP.c
+index f4b4597..635f1e8 100644
+--- a/WWW/Library/Implementation/HTTCP.c
++++ b/WWW/Library/Implementation/HTTCP.c
+@@ -1711,7 +1711,7 @@ static void get_host_details(void)
+     gethostname(name, namelength);	/* Without domain */
+     StrAllocCopy(hostname, name);
+ #ifdef LY_FIND_LEAKS
+-    atexit(free_HTTCP_hostname);
++    LYatexit(free_HTTCP_hostname);
+ #endif
+ #ifdef UCX
+     /*
+diff --git a/WWW/Library/Implementation/HTTP.c b/WWW/Library/Implementation/HTTP.c
+index c47d446..e3db9f1 100644
+--- a/WWW/Library/Implementation/HTTP.c
++++ b/WWW/Library/Implementation/HTTP.c
+@@ -260,7 +260,7 @@ SSL *HTGetSSLHandle(void)
+ #endif
+ 	}
+ #endif
+-	atexit(free_ssl_ctx);
++	LYatexit(free_ssl_ctx);
+     }
+ 
+     if (non_empty(SSL_client_key_file)) {
+diff --git a/src/DefaultStyle.c b/src/DefaultStyle.c
+index 3dc17f7..f7386e0 100644
+--- a/src/DefaultStyle.c
++++ b/src/DefaultStyle.c
+@@ -469,7 +469,7 @@ HTStyleSheet *DefaultStyle(HTStyle ***result_array)
+ 	*result = sheet;
+ 	result->styles = 0;
+ #ifdef LY_FIND_LEAKS
+-	atexit(FreeDefaultStyle);
++	LYatexit(FreeDefaultStyle);
+ #endif
+ 	for (p = sheet.styles; p != 0; p = p->next) {
+ 	    q = HTStyleNew();
+diff --git a/src/GridText.c b/src/GridText.c
+index 419f6ee..1aa8691 100644
+--- a/src/GridText.c
++++ b/src/GridText.c
+@@ -1083,7 +1083,7 @@ HText *HText_new(HTParentAnchor *anchor)
+     if (!loaded_texts) {
+ 	loaded_texts = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-	atexit(free_all_texts);
++	LYatexit(free_all_texts);
+ #endif
+     }
+ 
+@@ -7805,7 +7805,7 @@ void HTAddSearchQuery(char *query)
+     if (!search_queries) {
+ 	search_queries = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-	atexit(HTSearchQueries_free);
++	LYatexit(HTSearchQueries_free);
+ #endif
+ 	HTList_addObject(search_queries, new_query);
+ 	return;
+diff --git a/src/HTML.c b/src/HTML.c
+index 5c57a07..e93f685 100644
+--- a/src/HTML.c
++++ b/src/HTML.c
+@@ -7638,7 +7638,7 @@ HTStructured *HTML_new(HTParentAnchor *anchor,
+ #ifdef USE_COLOR_STYLE
+ #ifdef LY_FIND_LEAKS
+     if (Style_className == 0) {
+-	atexit(free_Style_className);
++	LYatexit(free_Style_className);
+     }
+ #endif
+     addClassName("", "", (size_t) 0);
+diff --git a/src/LYCgi.c b/src/LYCgi.c
+index 72493b2..cdf2749 100644
+--- a/src/LYCgi.c
++++ b/src/LYCgi.c
+@@ -88,7 +88,7 @@ static void remember_alloced(void *ptr)
+     if (!alloced) {
+ 	alloced = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-	atexit(free_alloced_lynxcgi);
++	LYatexit(free_alloced_lynxcgi);
+ #endif
+     }
+     HTList_addObject(alloced, ptr);
+diff --git a/src/LYCookie.c b/src/LYCookie.c
+index 6755829..ff8ff82 100644
+--- a/src/LYCookie.c
++++ b/src/LYCookie.c
+@@ -440,7 +440,7 @@ static void store_cookie(cookie * co, const char *hostname,
+      */
+     if (domain_list == NULL) {
+ #ifdef LY_FIND_LEAKS
+-	atexit(LYCookieJar_free);
++	LYatexit(LYCookieJar_free);
+ #endif
+ 	domain_list = HTList_new();
+ 	total_cookies = 0;
+@@ -2758,7 +2758,7 @@ static void cookie_domain_flag_set(char *domainstr,
+      */
+     if (domain_list == NULL) {
+ #ifdef LY_FIND_LEAKS
+-	atexit(LYCookieJar_free);
++	LYatexit(LYCookieJar_free);
+ #endif
+ 	domain_list = HTList_new();
+ 	total_cookies = 0;
+diff --git a/src/LYGetFile.c b/src/LYGetFile.c
+index 57e7f30..ea9c545 100644
+--- a/src/LYGetFile.c
++++ b/src/LYGetFile.c
+@@ -1347,7 +1347,7 @@ void add_trusted(char *str,
+ 	return;
+     if (first) {
+ #ifdef LY_FIND_LEAKS
+-	atexit(LYTrusted_free);
++	LYatexit(LYTrusted_free);
+ #endif
+ 	first = FALSE;
+     }
+diff --git a/src/LYHistory.c b/src/LYHistory.c
+index 4fd5567..b50bd8b 100644
+--- a/src/LYHistory.c
++++ b/src/LYHistory.c
+@@ -147,7 +147,7 @@ void LYAddVisitedLink(DocInfo *doc)
+     if (!Visited_Links) {
+ 	Visited_Links = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-	atexit(Visited_Links_free);
++	LYatexit(Visited_Links_free);
+ #endif
+ 	Latest_last.prev_latest = &Latest_first;
+ 	Latest_first.next_latest = &Latest_last;
+@@ -417,7 +417,7 @@ int LYpush(DocInfo *doc, int force_push)
+ #ifdef LY_FIND_LEAKS
+     if (!already_registered_clean_all_history) {
+ 	already_registered_clean_all_history = 1;
+-	atexit(clean_all_history);
++	LYatexit(clean_all_history);
+     }
+ #endif
+ 
+@@ -997,7 +997,7 @@ static void to_stack(char *str)
+ #ifdef LY_FIND_LEAKS
+     if (!already_registered_free_messages_stack) {
+ 	already_registered_free_messages_stack = 1;
+-	atexit(free_messages_stack);
++	LYatexit(free_messages_stack);
+     }
+ #endif
+     if (topOfStack >= status_buf_size) {
+diff --git a/src/LYJump.c b/src/LYJump.c
+index 877d532..28fd45d 100644
+--- a/src/LYJump.c
++++ b/src/LYJump.c
+@@ -111,7 +111,7 @@ BOOL LYJumpInit(char *config)
+     StrAllocCopy(jtp->file, cp);
+ #ifdef LY_FIND_LEAKS
+     if (!JThead)
+-	atexit(LYJumpTable_free);
++	LYatexit(LYJumpTable_free);
+ #endif /* LY_FIND_LEAKS */
+ 
+     /*
+diff --git a/src/LYLocal.c b/src/LYLocal.c
+index 754a7d4..5377b83 100644
+--- a/src/LYLocal.c
++++ b/src/LYLocal.c
+@@ -2272,7 +2272,7 @@ static int fill_argv_for_execv(char ***argvp,
+ 	if (!*argvp)
+ 	    return (-1);
+ #ifdef LY_FIND_LEAKS
+-	atexit(clear_install_path);
++	LYatexit(clear_install_path);
+ #endif
+     }
+     args = *argvp;
+diff --git a/src/LYMain.c b/src/LYMain.c
+index 1d52bb6..e6d9901 100644
+--- a/src/LYMain.c
++++ b/src/LYMain.c
+@@ -1068,14 +1068,14 @@ int main(int argc,
+     /*
+      * Register the final function to be executed when being exited.  Will
+      * display memory leaks if the -find-leaks option is used.  This should
+-     * be the first call to atexit() for leak-checking, which ensures that 
++     * be the first call to LYatexit() for leak-checking, which ensures that 
+      * all of the other functions will be invoked before LYLeaks().
+      */
+-    atexit(LYLeaks);
++    LYatexit(LYLeaks);
+     /*
+      * Register the function which will free our allocated globals.
+      */
+-    atexit(free_lynx_globals);
++    LYatexit(free_lynx_globals);
+ 
+     LYAddPathToHome(LYLeaksPath, (size_t) LY_MAXPATH, LEAKAGE_SINK);
+ #endif /* LY_FIND_LEAKS */
+@@ -1135,7 +1135,7 @@ int main(int argc,
+     }
+     __djgpp_set_sigquit_key(0x082D);	/* Bind ALT-X to SIGQUIT */
+     signal(SIGQUIT, cleanup_sig);
+-    atexit(reset_break);
++    LYatexit(reset_break);
+ 
+     if (((ccp = LYGetEnv("SHELL")) != NULL)
+ 	&& (strstr(LYPathLeaf(ccp), "sh") != NULL))
+@@ -1425,7 +1425,7 @@ int main(int argc,
+ 		if (LYStdinArgs == NULL) {
+ 		    LYStdinArgs = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-		    atexit(LYStdinArgs_free);
++		    LYatexit(LYStdinArgs_free);
+ #endif
+ 		}
+ 		StrAllocCopy(argument, buf);
+@@ -2085,7 +2085,7 @@ int main(int argc,
+ 	HTMLSRC_init_caches(FALSE);	/* do it before terminal is initialized */
+     }
+ #ifdef LY_FIND_LEAKS
+-    atexit(html_src_clean_data);
++    LYatexit(html_src_clean_data);
+ #endif
+ #endif
+ 
+diff --git a/src/LYMainLoop.c b/src/LYMainLoop.c
+index b5c7ab8..18d5f2f 100644
+--- a/src/LYMainLoop.c
++++ b/src/LYMainLoop.c
+@@ -5592,7 +5592,7 @@ int mainloop(void)
+     BStrCopy0(user_input_buffer, "");
+     BStrCopy0(prev_target, "");
+ #ifdef LY_FIND_LEAKS
+-    atexit(free_mainloop_variables);
++    LYatexit(free_mainloop_variables);
+ #endif
+   initialize:
+     set_address(&newdoc, startfile);
+@@ -7909,7 +7909,7 @@ void HTAddGotoURL(char *url)
+     if (!Goto_URLs) {
+ 	Goto_URLs = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-	atexit(HTGotoURLs_free);
++	LYatexit(HTGotoURLs_free);
+ #endif
+ 	HTList_addObject(Goto_URLs, mycopy);
+ 	return;
+diff --git a/src/LYMap.c b/src/LYMap.c
+index 29b60f1..66f1db8 100644
+--- a/src/LYMap.c
++++ b/src/LYMap.c
+@@ -154,7 +154,7 @@ BOOL LYAddImageMap(char *address,
+ 	if (!LynxMaps) {
+ 	    LynxMaps = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-	    atexit(LYLynxMaps_free);
++	    LYatexit(LYLynxMaps_free);
+ #endif
+ 	}
+ 	theList = LynxMaps;
+diff --git a/src/LYOptions.c b/src/LYOptions.c
+index 828aacc..ca6ebb1 100644
+--- a/src/LYOptions.c
++++ b/src/LYOptions.c
+@@ -2584,7 +2584,7 @@ void build_lss_enum(HTList *list)
+     int count = HTList_count(list);
+ 
+ #ifdef LY_FIND_LEAKS
+-    atexit(free_colorstyle_leaks);
++    LYatexit(free_colorstyle_leaks);
+ #endif
+ 
+     FREE(color_style_values);
+diff --git a/src/LYReadCFG.c b/src/LYReadCFG.c
+index 24efbf5..0d15c4e 100644
+--- a/src/LYReadCFG.c
++++ b/src/LYReadCFG.c
+@@ -245,7 +245,7 @@ static void add_item_to_list(char *buffer,
+ 
+ 	*list_ptr = cur_item;
+ #ifdef LY_FIND_LEAKS
+-	atexit(free_all_item_lists);
++	LYatexit(free_all_item_lists);
+ #endif
+     } else {
+ 	/*
+diff --git a/src/LYStyle.c b/src/LYStyle.c
+index 77be188..98099f7 100644
+--- a/src/LYStyle.c
++++ b/src/LYStyle.c
+@@ -448,8 +448,8 @@ static void style_initialiseHashTable(void)
+     if (firsttime) {
+ 	firsttime = FALSE;
+ #ifdef LY_FIND_LEAKS
+-	atexit(free_colorstylestuff);
+-	atexit(free_colorstyle_leaks);
++	LYatexit(free_colorstylestuff);
++	LYatexit(free_colorstyle_leaks);
+ #endif
+     }
+     s_alink = color_style_1("alink");
+@@ -846,7 +846,7 @@ void add_to_lss_list(const char *source, const char *resolved)
+     int position = 0;
+ 
+ #ifdef LY_FIND_LEAKS
+-    atexit(free_colorstyle_leaks);
++    LYatexit(free_colorstyle_leaks);
+ #endif
+ 
+     CTRACE((tfp, "add_to_lss_list(\"%s\", \"%s\")\n",
+diff --git a/src/LYUtils.c b/src/LYUtils.c
+index e45e641..8a094d0 100644
+--- a/src/LYUtils.c
++++ b/src/LYUtils.c
+@@ -2152,7 +2152,7 @@ void LYAddLocalhostAlias(char *alias)
+     if (!localhost_aliases) {
+ 	localhost_aliases = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-	atexit(LYLocalhostAliases_free);
++	LYatexit(LYLocalhostAliases_free);
+ #endif
+     }
+ 
+@@ -3201,7 +3201,7 @@ void HTAddSugFilename(char *fname)
+     if (!sug_filenames) {
+ 	sug_filenames = HTList_new();
+ #ifdef LY_FIND_LEAKS
+-	atexit(HTSugFilenames_free);
++	LYatexit(HTSugFilenames_free);
+ #endif
+ 	HTList_addObject(sug_filenames, tmp);
+ 	return;
+@@ -5196,7 +5196,7 @@ const char *Home_Dir(void)
+ 	}
+ 	homedir = (const char *) HomeDir;
+ #ifdef LY_FIND_LEAKS
+-	atexit(LYHomeDir_free);
++	LYatexit(LYHomeDir_free);
+ #endif
+     }
+     if (homedir == NULL) {
+diff --git a/src/LYexit.c b/src/LYexit.c
+index 8b94048..34ad284 100644
+--- a/src/LYexit.c
++++ b/src/LYexit.c
+@@ -28,7 +28,7 @@ static void (*callstack[ATEXITSIZE]) (void);
+ static int topOfStack = 0;
+ 
+ /*
+- * Capture "atexit()" calls for our own accounting.
++ * Capture "LYatexit()" calls for our own accounting.
+  */
+ int LYatexit(void (*function) (void))
+ {
+diff --git a/src/UCdomap.c b/src/UCdomap.c
+index 0ec239a..d3a5940 100644
+--- a/src/UCdomap.c
++++ b/src/UCdomap.c
+@@ -2173,7 +2173,7 @@ void UCInit(void)
+ 
+     UCreset_allocated_LYCharSets();
+ #ifdef LY_FIND_LEAKS
+-    atexit(UCcleanup_mem);
++    LYatexit(UCcleanup_mem);
+ #endif
+     UCconsole_map_init();
+ 
+diff --git a/src/parsdate.c b/src/parsdate.c
+index 07bbc9d..e314a2b 100644
+--- a/src/parsdate.c
++++ b/src/parsdate.c
+@@ -1146,7 +1146,7 @@ time_t parsedate(char *p,
+ 
+     if (!initialized) {
+ 	initialized = 1;
+-	atexit(parsedate_leaks);
++	LYatexit(parsedate_leaks);
+     }
+ #endif
+ 
+
+--- lynx2.9.2.orig/WWW/Library/Implementation/LYexit.h
++++ lynx2.9.2/WWW/Library/Implementation/LYexit.h
+@@ -37,7 +37,7 @@
+ #undef exit
+ #endif
+ #define exit(code) LYexit(code)
+-#define atexit LYatexit
++//#define atexit LYatexit
+ #define ATEXITSIZE 50
+ 
+ /*
