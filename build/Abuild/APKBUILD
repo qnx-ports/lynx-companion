@@ -5,7 +5,7 @@
 pkgname=lynx
 pkgver=2.9.2
 _relver=${pkgver/_p/rel.}
-pkgrel=0
+pkgrel=${pkgrel:-0}
 pkgdesc="Cross-platform text-based browser"
 url="https://lynx.invisible-island.net/"
 arch="all"
@@ -52,6 +52,7 @@ package() {
 }
 
 
+options="$options ${DISABLE_CHECK:+!check}"
 sha512sums="
 bb9ed23a5f8664ca8bccd95cc55683849aa707f601e209d84e0acaed151b78cd772316f527881022ff120049c4fc586c05d579f9d616a2b108d9ddfaa5b2159d  lynx2.9.2.tar.bz2
 6ba69ca047f52597fce36bd953d789fbfa5d8c0bc6e95949475b2cc2500341123a5473293b3bcde28dcb9111c7e0223afa00104c1371aaece3ac134192450691  atexit.patch
